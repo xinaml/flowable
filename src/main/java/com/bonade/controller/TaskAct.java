@@ -39,6 +39,7 @@ public class TaskAct {
      * @param taskId
      * @param userId
      * @return
+     * @desc 当任务分配给了某一组人员时
      */
     @PostMapping(value = "claim")
     public String claim(String taskId, String userId) {
@@ -99,6 +100,24 @@ public class TaskAct {
     }
 
     /**
+     * 通过实例id获取任务列表
+     *
+     * @param processInstanceId
+     * @return
+     */
+    @GetMapping(value = "list/{processInstanceId}")
+    public List<String> getTaskByProcessInstanceId(@PathVariable String processInstanceId) {
+        List<String> results = new ArrayList<>();
+        List<Task> tasks = taskService.createTaskQuery()
+                .processInstanceId(processInstanceId)
+                .list();
+        for (Task task : tasks) {
+            results.add("taskId:" + task.getId() + ",processInstanceId:" + task.getProcessInstanceId() + " task:" + task.getName());
+        }
+        return results;
+    }
+
+    /**
      * 任务持有
      *
      * @param userId
@@ -131,16 +150,18 @@ public class TaskAct {
      * 添加附件
      *
      * @param taskId
+     * @param attachmentType 附件类型
+     * @param url            附件路径
      * @return
      */
     @PostMapping(value = "add/attachment")
-    public String addAttachment(String taskId, String url) {
+    public String addAttachment(String taskId, String attachmentType, String url) {
         // 查找任务
         Task task = taskService.createTaskQuery().taskId(taskId)
                 .singleResult();
 //        String attachmentType, String taskId, String processInstanceId, String attachmentName, String attachmentDescription,  String url
         // 设置输入流为任务附件
-        taskService.createAttachment("PDF", task.getId(), task.getProcessInstanceId(), "附件名",
+        taskService.createAttachment(attachmentType, task.getId(), task.getProcessInstanceId(), "附件名",
                 "这个附件描述", url);
         return "添加附件成功";
     }
