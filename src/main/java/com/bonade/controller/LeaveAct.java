@@ -1,5 +1,6 @@
 package com.bonade.controller;
 
+import org.flowable.common.engine.impl.identity.Authentication;
 import org.flowable.engine.RuntimeService;
 import org.flowable.engine.TaskService;
 import org.flowable.engine.runtime.ProcessInstance;
@@ -31,9 +32,11 @@ public class LeaveAct {
     @PostMapping(value = "start")
     public String start(@RequestParam String userId) {
         //启动流程
+        Authentication.setAuthenticatedUserId("lgq");//设置任务发起人
         HashMap<String, Object> map = new HashMap<>();
         map.put("userId", userId);
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("leave", map);
+        Authentication.setAuthenticatedUserId(null);//防止多线程的时候出问题。
         return "提交成功.流程Id为：" + processInstance.getId();
     }
     /**

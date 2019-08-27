@@ -1,9 +1,12 @@
 package com.bonade.controller;
 
+import org.flowable.engine.HistoryService;
 import org.flowable.engine.TaskService;
 import org.flowable.engine.task.Attachment;
 import org.flowable.engine.task.Comment;
 import org.flowable.task.api.Task;
+import org.flowable.task.api.history.HistoricTaskInstance;
+import org.flowable.task.api.history.HistoricTaskInstanceQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +21,8 @@ import java.util.List;
 public class TaskAct {
     @Autowired
     private TaskService taskService;
+    @Autowired
+    private HistoryService historyService;
 
     /**
      * 任务委托
@@ -107,12 +112,15 @@ public class TaskAct {
      */
     @GetMapping(value = "list/{processInstanceId}")
     public List<String> getTaskByProcessInstanceId(@PathVariable String processInstanceId) {
+       List<HistoricTaskInstance> historicTaskInstances =
+               historyService.createHistoricTaskInstanceQuery()
+                       .processInstanceId(processInstanceId)
+                       .orderByTaskCreateTime().asc()
+                       .list();
         List<String> results = new ArrayList<>();
-        List<Task> tasks = taskService.createTaskQuery()
-                .processInstanceId(processInstanceId)
-                .list();
-        for (Task task : tasks) {
-            results.add("taskId:" + task.getId() + ",processInstanceId:" + task.getProcessInstanceId() + " task:" + task.getName());
+
+        for (HistoricTaskInstance task : historicTaskInstances) {
+            results.add("执行人:" + task.getAssignee() + ",任务名:" + task.getName() + " taskId:" + task.getId());
         }
         return results;
     }

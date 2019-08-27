@@ -14,7 +14,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import javax.sql.DataSource;
 
 @Configuration
-public class CommonConfig {
+public class FlowableDataSourceConfig {
 
     @Bean
     public DataSourceTransactionManager dataSourceTransactionManager(DataSource dataSource) {
@@ -25,9 +25,7 @@ public class CommonConfig {
     @Primary
     public SqlSessionFactory SqlSessionFactory(DataSource dataSource) throws Exception {
         SqlSessionFactoryBean sessionFactoryBean = new SqlSessionFactoryBean();
-
         sessionFactoryBean.setDataSource(dataSource);
-
         Resource resource = new PathMatchingResourcePatternResolver().getResource("classpath:mybatis/mybatis-config.xml");
         sessionFactoryBean.setConfigLocation(resource);
         return sessionFactoryBean.getObject();

@@ -23,6 +23,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
+/**
+ * 流程图编码配置，不配置流程图出现中文乱码
+ */
 @Configuration
 @EnableConfigurationProperties(FlowableProperties.class)
 public class FlowDataSourceProcessEngineAutoConfig extends ProcessEngineAutoConfiguration {

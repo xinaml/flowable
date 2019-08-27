@@ -1,22 +1,21 @@
 package com.bonade.config;
 
 import com.bonade.filter.CustomHandlerInterceptor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.*;
 
 import javax.annotation.Resource;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
 
+/**
+ * 静态资源配置
+ */
 @Configuration
 @EnableWebMvc
 public class StaticResourceConfig implements WebMvcConfigurer {
 
     @Resource
     private CustomHandlerInterceptor baseInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(baseInterceptor)
@@ -26,6 +25,7 @@ public class StaticResourceConfig implements WebMvcConfigurer {
 
     /**
      * 添加静态资源文件，外部可以直接访问地址
+     *
      * @param registry
      */
     @Override
