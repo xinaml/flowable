@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.flowable.org/processdef">
+  <process id="more" name="会签流程测试" isExecutable="true">
+    <documentation>测试flowable会签</documentation>
+    <startEvent id="Start" name="开始"/>
+    <userTask id="UserTask1" name="多人审核" flowable:assignee="${assignee}">
+      <extensionElements>
+        <modeler:initiator-can-complete xmlns:modeler="http://flowable.org/modeler"><![CDATA[false]]></modeler:initiator-can-complete>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" flowable:collection="assigneeList" flowable:elementVariable="assignee">
+        <loopCardinality>4</loopCardinality>
+        <completionCondition>${nrOfCompletedInstances/nrOfInstances >= 0.50}</completionCondition>
+      </multiInstanceLoopCharacteristics>
+    </userTask>
+    <userTask id="UserTask2" name="ceo审核" flowable:assignee="${ceoId}">
+      <extensionElements>
+        <modeler:initiator-can-complete xmlns:modeler="http://flowable.org/modeler"><![CDATA[false]]></modeler:initiator-can-complete>
+      </extensionElements>
+    </userTask>
+    <userTask id="sid-3428E4FD-C52E-4969-B988-BC9EC241AE82" name="申请资金" flowable:assignee="${userId}">
+      <extensionElements>
+        <modeler:initiator-can-complete xmlns:modeler="http://flowable.org/modeler"><![CDATA[false]]></modeler:initiator-can-complete>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="sid-FC81D087-65F5-4EF6-AC47-B1C14B72C2B8" sourceRef="Start" targetRef="sid-3428E4FD-C52E-4969-B988-BC9EC241AE82"/>
+    <sequenceFlow id="U1-U2" sourceRef="sid-3428E4FD-C52E-4969-B988-BC9EC241AE82" targetRef="UserTask1"/>
+    <sequenceFlow id="U2-E" sourceRef="UserTask1" targetRef="UserTask2"/>
+    <endEvent id="sid-0853611A-5A85-4FC4-8AD0-9D7D2ED6DCC1" name="结束"/>
+    <sequenceFlow id="sid-6981AD3C-F6D4-487A-B9FB-28BF53E82005" sourceRef="UserTask2" targetRef="sid-0853611A-5A85-4FC4-8AD0-9D7D2ED6DCC1"/>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_more">
+    <bpmndi:BPMNPlane bpmnElement="more" id="BPMNPlane_more">
+      <bpmndi:BPMNShape bpmnElement="Start" id="BPMNShape_Start">
+        <omgdc:Bounds height="30.0" width="30.0" x="15.0" y="70.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTask1" id="BPMNShape_UserTask1">
+        <omgdc:Bounds height="60.0" width="100.0" x="240.0" y="55.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTask2" id="BPMNShape_UserTask2">
+        <omgdc:Bounds height="60.0" width="100.0" x="390.0" y="55.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-3428E4FD-C52E-4969-B988-BC9EC241AE82" id="BPMNShape_sid-3428E4FD-C52E-4969-B988-BC9EC241AE82">
+        <omgdc:Bounds height="80.0" width="100.0" x="90.0" y="45.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-0853611A-5A85-4FC4-8AD0-9D7D2ED6DCC1" id="BPMNShape_sid-0853611A-5A85-4FC4-8AD0-9D7D2ED6DCC1">
+        <omgdc:Bounds height="28.0" width="28.0" x="570.0" y="71.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="sid-FC81D087-65F5-4EF6-AC47-B1C14B72C2B8" id="BPMNEdge_sid-FC81D087-65F5-4EF6-AC47-B1C14B72C2B8">
+        <omgdi:waypoint x="44.9499984899576" y="85.0"/>
+        <omgdi:waypoint x="90.0" y="85.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="U2-E" id="BPMNEdge_U2-E">
+        <omgdi:waypoint x="339.9499999999989" y="85.0"/>
+        <omgdi:waypoint x="389.9999999999934" y="85.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-6981AD3C-F6D4-487A-B9FB-28BF53E82005" id="BPMNEdge_sid-6981AD3C-F6D4-487A-B9FB-28BF53E82005">
+        <omgdi:waypoint x="489.94999999999686" y="85.0"/>
+        <omgdi:waypoint x="570.0" y="85.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="U1-U2" id="BPMNEdge_U1-U2">
+        <omgdi:waypoint x="189.94999999998177" y="85.0"/>
+        <omgdi:waypoint x="239.99999999999284" y="85.0"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
